@@ -10,7 +10,10 @@ import Sobre from './Components/Sobre';
 import Contato from './Components/Contato';
 import Campanhas from './Components/Campanhas';
 
+import base from './base'
+
 class App extends Component {
+  
   render() {
     return (
       
@@ -19,7 +22,6 @@ class App extends Component {
           <Header />
           <Route exact path='/' component={Home} />
           <Route path='/sobre' component={Sobre} />
-          
           <Route path='/contato' component={Contato} />
           <Route path='/campanhas' component={Campanhas} />
           <Footer/>
