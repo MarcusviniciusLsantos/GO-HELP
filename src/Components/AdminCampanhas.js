@@ -32,16 +32,34 @@ class AdminCampanhas extends Component {
   })
 }
  handleSave(){
-  const nome = this.name.value
+  const nome = this.nome.value
   const descricao = this.descricao.value
+  const tipo = this.state.tipo
+  const comoDoar = this.state.tipo === 'produtos' ? this.comoDoar.value : null
+  const meta = this.state.tipo === 'doacao' ? this.meta.value : null
+  const doado = this.state.tipo === 'doacao' ? this.doado.value : null
 
   base.push('campanhas', {
-    data: { nome, descricao },
-   
-  }, err => {
-    console.log(err)
-  })
-}
+    data: { nome, descricao, tipo, comoDoar, meta, doado },
+    then: err => {
+        if(!err){
+          this.nome.value = ''
+          this.descricao.value = ''
+          this.subTitulo.value = ''
+          this.setState({tipo: ''})
+          if(this.meta){
+            this.meta = ''
+          }
+          if(this.doado){
+            this.doado = ''
+          }
+          if (this.comoDoar) {
+              this.comoDoar = ''
+          }
+    }
+  }
+})
+ }
 
   
   renderCampanha(key, campanha){
@@ -60,8 +78,21 @@ class AdminCampanhas extends Component {
       <div>
         <h1>Campanhas</h1>
         <h2>Nova Campanha</h2>
-        Campanha: <input type='text' ref={ref => this.name = ref} /><br />
+        Campanha: <input type='text' ref={ref => this.nome = ref} /><br />
+        Sub-título: <input type='text' ref={ref => this.subTitulo = ref} /><br />
         Descrição: <textarea ref={ref => this.descricao = ref} ></textarea><br/>
+        Tipo: <br/>
+            <input type='radio' name='tipo' onClick={()=> this.setState({ tipo: 'doacao'})}/>Doação <br/>
+            <input type='radio' name='tipo' onClick={()=> this.setState({ tipo: 'produtos'})}/>Produtos<br/> 
+        {this.state.tipo === 'doacao' && <div> 
+          <h4>Doação</h4>
+          Meta: <input type='text' ref={ref => this.meta = ref} /><br />
+          Doado: <input type='text' ref={ref => this.doado = ref} defaultValue={0} /><br />
+        </div>}
+        {this.state.tipo === 'produtos' && <div>
+          <h4>Produtos </h4>
+          Como Doar: <input type='text' ref={ref => this.comoDoar = ref} /><br/>
+        </div>}
         <button onClick={this.handleSave}> Salvar Nova Campanha</button>
         <ul>
           { 
